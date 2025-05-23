@@ -4,16 +4,19 @@ import "errors"
 
 // Primary port
 type OrderService interface {
-	CreateOrder(order Order) error
+	CreateOrder(order Order) error //โดยจะ return entities Order ตัวเดียวกับของ repo ออกไป
 }
 
-//สร้าง struct เพื่อรับ business logicore
+//---------------  ส่วนของ service ---------------//
+
+//สร้าง struct เพื่อรับ business logicore เพราะ service ไม่มี data เป็นของตัวเองเป็นตัวกลางรับลูกส่งลูก เลยต้องตัวเก็บข้อมูลเพื่อใช้ดึง data
 type orderServiceImpl struct {
-	repo OrderRepository
+	repo OrderRepository //การอ้างถึง interface
 }
 
+// ทำหน้าที่เหมือน Constructor คือ รับ OrderRepository และ return OrderService
 func NewOrderService(repo OrderRepository) OrderService {
-	return &orderServiceImpl{repo: repo}
+	return &orderServiceImpl{repo: repo} //return การ intance orderServiceImpl
 }
 
 func (s *orderServiceImpl) CreateOrder(order Order) error {
