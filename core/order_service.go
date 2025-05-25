@@ -11,7 +11,7 @@ type OrderService interface {
 
 //สร้าง struct เพื่อรับ business logicore เพราะ service ไม่มี data เป็นของตัวเองเป็นตัวกลางรับลูกส่งลูก เลยต้องตัวเก็บข้อมูลเพื่อใช้ดึง data
 type orderServiceImpl struct {
-	repo OrderRepository //การอ้างถึง interface
+	repo OrderRepository //การอ้างถึง interface secondary port เพื่อใช้ตัวแปรหรือข้อมูลฝั่ง secondary port
 }
 
 // ทำหน้าที่เหมือน Constructor คือ รับ OrderRepository และ return OrderService
@@ -19,6 +19,7 @@ func NewOrderService(repo OrderRepository) OrderService {
 	return &orderServiceImpl{repo: repo} //return การ intance orderServiceImpl
 }
 
+// สามารคุยกับ Primary port(CreateOrder) และคุยผ่าน secondary port(s *orderServiceImpl)
 func (s *orderServiceImpl) CreateOrder(order Order) error {
 	if order.Total <= 0 {
 		return errors.New("total must be positive")
